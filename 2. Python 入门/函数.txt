@@ -1,0 +1,95 @@
+2018.6.13
+1、定义函数
+def cylinder_volume(height, radius=5):
+    pi = 3.14159
+    return height * pi * radius ** 2
+    
+def readable_timedelta(days):
+    # use integer division to get the number of weeks
+    weeks = days // 7
+    # use % to get the number of days that remain
+    remainder = days % 7
+    return "{} week(s) and {} day(s).".format(weeks, remainder)
+
+
+
+2、变量作用域
+在函数中使用变量时，务必要考虑作用域。如果变量是在函数内创建的，则只能在该函数内使用该变量。你无法从该函数外面访问该变量。
+要点：
+1) 建议将变量定义在所需的最小作用域内。
+2) Python不允许函数修改不在函数作用域内的变量，该原则仅适用于整数和字符串，列表、字典、集合、类中可以在子程序中（子函数）通过修改局部变量达到修改全局变量的目的。
+以下代码将导致UnboundLocalError错误。
+egg_count = 0
+def buy_eggs():
+    egg_count += 12 # purchase a dozen eggs
+buy_eggs()
+
+
+
+3、文档(Docstring)
+文档字符串(docstrings)是一种注释，用于解释函数的作用以及使用方式。
+def population_density(population, land_area):
+    """Calculate the population density of an area.
+
+    INPUT:
+    population: int. The population of that area
+    land_area: int or float. This function is unit-agnostic, if you pass in values in terms
+    of square km or square miles the function will return a density in those units.
+
+    OUTPUT: 
+    population_density: population / land_area. The population density of a particular area.
+    """
+    return population / land_area
+
+
+
+4、Lambda表达式
+使用 Lambda 表达式创建匿名函数，即没有名称的函数。lambda 表达式非常适合快速创建在代码中以后不会用到的函数。尤其对高阶函数或将其他函数作为参数的函数来说，非常实用。
+Lambda 函数的组成部分
+1) 关键字 lambda 表示这是一个 lambda 表达式。
+2) lambda 之后是该匿名函数的一个或多个参数（用英文逗号分隔），然后是一个英文冒号 :。和函数相似，lambda 表达式中的参数名称是随意的。
+3) 最后一部分是被评估并在该函数中返回的表达式，和你可能会在函数中看到的 return 语句很像。
+multiply = lambda x, y: x * y
+multiply(3 , 4)
+map() 是一个高阶内置函数，接受函数和可迭代对象作为输入，并返回一个将该函数应用到可迭代对象的每个元素的迭代器。
+filter() 是一个高阶内置函数，接受函数和可迭代对象作为输入，并返回一个由可迭代对象中的特定元素（该函数针对该元素会返回 True）组成的迭代器。
+numbers = [
+              [34, 63, 88, 71, 29],
+              [90, 78, 51, 27, 45],
+              [63, 37, 85, 46, 22],
+              [51, 22, 34, 11, 18]
+           ]
+averages = list(map(lambda x: sum(x) / len(x), numbers))
+print(averages)
+cities = ["New York City", "Los Angeles", "Chicago", "Mountain View", "Denver", "Boston"]
+short_cities = list(filter(lambda x: len(x) < 10, cities))
+print(short_cities)
+
+
+
+5、迭代器和生成器
+迭代器(iterators)是每次可以返回一个对象元素的对象，例如返回一个列表。我们到目前为止使用的很多内置函数（例如 enumerate）都会返回一个迭代器。
+迭代器是一种表示数据流的对象。这与列表不同，列表是可迭代对象，但不是迭代器，因为它不是数据流。
+生成器(generators)是使用函数创建迭代器的简单方式。也可以使用类定义迭代器，更多详情请参阅https://docs.python.org/3/tutorial/classes.html#iterators。
+def my_range(x):
+    i = 0
+    while i < x:
+        yield i
+        i += 1
+print(list(my_range(4))
+该函数使用了 yield 而不是关键字 return。这样使函数能够一次返回一个值，并且每次被调用时都从停下的位置继续。关键字 yield 是将生成器与普通函数区分开来的依据。
+
+lessons = ["Why Python Programming", "Data Types and Operators", "Control Flow", "Functions", "Scripting"]
+def my_enumerate(iterable, start=0):
+    # Implement your generator function here
+    for i in range(len(iterable)):
+        yield start+i,iterable[i]
+for i, lesson in my_enumerate(lessons, 1):
+    print("Lesson {}: {}".format(i, lesson))
+    
+def chunker(iterable, size):
+    """Yield successive chunks from iterable of length size."""
+    for i in range(0, len(iterable), size):
+        yield iterable[i:i + size]
+for chunk in chunker(range(25), 4):
+    print(list(chunk))

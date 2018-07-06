@@ -1,0 +1,106 @@
+1、安装python
+方法一：安装anaconda环境
+下载地址：https://www.anaconda.com/download/
+安装方法参考：https://www.zhihu.com/question/58033789
+方法二：只安装python
+下载地址：https://www.python.org/downloads/
+
+
+
+2、代码编辑器
+对于 Mac：
+  Atom
+  Sublime Text
+  TextWrangler
+  emacs
+  vim
+对于 Windows：
+  Atom
+  Sublime Text
+  Notepad++
+对于 Linux：
+  Atom
+  Sublime Text
+  emacs
+  vim
+
+
+
+3、脚本中接受输入
+可以使用内置函数 input 获取用户的原始输入，该函数接受一个可选字符串参数，用于指定在要求用户输入时向用户显示的消息。
+num = int(input("Enter an integer"))
+print("hello" * num)
+还可以使用内置函数 eval 将用户输入解析为 Python 表达式。该函数会将字符串评估为一行 Python 代码。
+result = eval(input("Enter an expression: "))
+print(result)
+输入与格式处理案例
+names = input("Enter names separated by commas: ").title().split(",")
+assignments = input("Enter assignment counts separated by commas: ").split(",")
+grades = input("Enter grades separated by commas: ").split(",")
+message = "Hi {},\n\nThis is a reminder that you have {} assignments left to \
+submit before you can graduate. You're current grade is {} and can increase \
+to {} if you submit all assignments before the due date.\n\n"
+for name, assignment, grade in zip(names, assignments, grades):
+    print(message.format(name, assignment, grade, int(grade) + int(assignment)*2))
+
+
+
+4、错误和异常处理
+当 Python 无法解析代码时，就会发生语法错误(SyntaxErrors)，因为我们没有遵守正确的 Python 语法。当你出现拼写错误或第一次开始学习 Python 时，可能会遇到这些错误。
+当在程序执行期间出现意外情况时，就会发生异常(exceptions)，即使代码在语法上正确无误。Python 有不同类型的内置异常，你可以在错误消息中查看系统抛出了什么异常。
+我们可以使用 try 语句处理异常。你可以使用 4 个子句（除了视频中显示的子句之外还有一个子句）。
+
+try 语句
+try：这是 try 语句中的唯一必需子句。该块中的代码是 Python 在 try 语句中首先运行的代码。
+except：如果 Python 在运行 try 块时遇到异常，它将跳到处理该异常的 except 块。
+else：如果 Python 在运行 try 块时没有遇到异常，它将在运行 try 块后运行该块中的代码。
+finally：在 Python 离开此 try 语句之前，在任何情形下它都将运行此 finally 块中的代码，即使要结束程序，例如：如果 Python 在运行 except 或 else 块中的代码时遇到错误，在停止程序之前，依然会执行此finally 块。
+def create_groups(items, num_groups):
+    try:
+        size = len(items) // num_groups
+    except ZeroDivisionError:
+        print("WARNING: Returning empty list. Please use a nonzero number.")
+        return []
+    else:
+        groups = []
+        for i in range(0, len(items), size):
+            groups.append(items[i:i + size])
+        return groups
+    finally:
+        print("{} groups returned.".format(num_groups))
+
+处理异常错误信息
+try:
+    # some code
+except Exception as e:
+   # some code
+   print("Exception occurred: {}".format(e))
+
+
+
+5、读写文件
+Python 提供了一个特殊的语法，该语法会在你使用完文件后自动关闭该文件。
+with open('my_path/my_file.txt', 'r') as f:
+    file_data = f.read()
+该 with 关键字使你能够打开文件，对文件执行操作，并在缩进代码（在此示例中是读取文件）执行之后自动关闭文件。
+f.read(8)读取文件中的8个字符。
+可以使用f.readline()读取文件中的一行，读出的字符串包含\n换行符
+很方便的是，Python 使用语法 for line in file 循环访问文件中的各行内容。 可以使用该语法创建列表中的行列表。因为每行依然包含换行符，因此可使用 .strip() 删掉换行符。
+camelot_lines = []
+with open("camelot.txt") as f:
+    for line in f:
+        camelot_lines.append(line.strip())
+
+
+
+6、导入本地脚本
+import 语句写在 Python 脚本的顶部，每个导入语句各占一行。
+如果导入的 Python 脚本与当前脚本位于同一个目录下，只需输入 import，然后是文件名，无需扩展名 .py。
+import useful_functions
+可以为导入的模块添加别名
+import useful_functions as uf
+uf.add_five([1, 2, 3, 4])
+
+使用 if main 块
+为了避免运行从其他脚本中作为模块导入的脚本中的可执行语句，将这些行包含在 if __name__ == "__main__" 块中。或者，将它们包含在函数 main() 中并在 if main 块中调用该函数。
+每当我们运行此类脚本时，Python 实际上会为所有模块设置一个特殊的内置变量 __name__。当我们运行脚本时，Python 会将此模块识别为主程序，并将此模块的 __name__ 变量设为字符串 "__main__"。对于该脚本中导入的任何模块，这个内置 __name__ 变量会设为该模块的名称。因此，条件 if __name__ == "__main__"会检查该模块是否为主程序。
